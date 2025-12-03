@@ -1,8 +1,14 @@
 /** biome-ignore-all lint/suspicious/noUnknownAtRules: <explanation> */
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: sans-serif;
+  }
 }
