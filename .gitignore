@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 README_school.md
+
+src/Hooks/useFetch.ts

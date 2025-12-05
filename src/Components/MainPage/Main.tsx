@@ -4,7 +4,7 @@ import MainDisplay from './MainDisplay'
 
 const Main = () => {
   return (
-    <div className='h-[calc(100vh-168px)] bg-blue-300'>
+    <div className='h-[calc(100vh-168px)]'>
       <MainSort />
       <MainDisplay />
     </div>

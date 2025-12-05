@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 import { useEffect, useState } from 'react';
 import Box from "@mui/material/Box";
+import { getDataNowPlaying } from '../../Hooks/useFetch';
 
 
 type ImageItem = {
@@ -20,6 +21,20 @@ const dummyImages: ImageItem[] = [
 
 
 const MainDisplay = () => {
+  const [nowPlayingList, setNowPlayingList] = useState<any[]>([])
+
+  useEffect(() => {
+    const getNowPlayingList = async () => {
+      const data = await getDataNowPlaying()
+      console.log(data)
+      setNowPlayingList(data)
+    }
+    getNowPlayingList()
+  }, [])
+
+  // console.log(nowPlayingList)
+
+
   // replace with API data later
   const images = dummyImages;
 
@@ -43,7 +58,7 @@ const MainDisplay = () => {
   useEffect(() => {
     if (images.length <= 3) return; // 2枚だけなら動かさない
 
-    const maxOffset = images.length - 3; // 例: 3枚 → 1, 4枚 → 2
+    const maxOffset = nowPlayingList.length - 3; // 例: 3枚 → 1, 4枚 → 2
     const STEP = 0.005; // 1回の更新でどれだけ進むか（大きいほど速い）
     let direction = 1; // 1: 右へ, -1: 左へ
 
@@ -68,7 +83,7 @@ const MainDisplay = () => {
     }, 16); // 約60fps
 
     return () => window.clearInterval(id);
-  }, [images.length, visibleCount]);
+  }, [nowPlayingList, visibleCount]);
 
   const slidePercent = 100 / visibleCount;
   const translateXPercent = -offset * slidePercent;
@@ -85,9 +100,9 @@ const MainDisplay = () => {
           height: "100%"
         }}
       >
-        {images.map((img) => (
+        {nowPlayingList.map((nowPlaying) => (
           <Box
-            key={img.id}
+            key={nowPlaying.id}
             // 幅 50% 固定 → 画面に常に2枚表示
             sx={{
               flex: `0 0 ${slidePercent}%`,
@@ -98,7 +113,7 @@ const MainDisplay = () => {
             <Box
               sx={{
                 width: "100%",
-                height: "100%",
+                height: "90%",
                 borderRadius: 2,
                 overflow: "hidden",
                 bgcolor: "grey.100",
@@ -109,10 +124,22 @@ const MainDisplay = () => {
             >
               <Box
                 component="img"
-                src={img.src}
-                alt={img.alt ?? ""}
-                sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                src={`https://image.tmdb.org/t/p/w500/${nowPlaying.poster_path}`}
+                alt={nowPlaying.id ?? ""}
+                sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
               />
+              {/* <p className='h-[10%] w-full text-center bg-amber-400'>aaaaaaaaaaa</p> */}
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                height: "10%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p className='h-full w-full text-center'>{nowPlaying.original_title}</p>
             </Box>
           </Box>
         ))}
