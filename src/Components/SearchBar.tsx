@@ -4,12 +4,17 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import { searchUniqueMovie } from '../Hooks/useFetch';
+import { useMovies } from '../context/MovieContext';
 
 const SearchBar = () => {
   const [inputValue, setInputValue] = useState("")
+  const { setMovies } = useMovies();
 
   const handleSearch = async () => {
-    await searchUniqueMovie(inputValue)
+    const query = inputValue.trim();
+    if (!query) return;
+    const results = await searchUniqueMovie(query);
+    setMovies(results);
   }
 
   return (
@@ -24,8 +29,8 @@ const SearchBar = () => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <IconButton type="button" sx={{ p: '20px' }} aria-label="search">
-        <SearchIcon onClick={handleSearch} />
+      <IconButton type="button" sx={{ p: '20px' }} aria-label="search" onClick={handleSearch}>
+        <SearchIcon />
       </IconButton>
     </Paper>
   )

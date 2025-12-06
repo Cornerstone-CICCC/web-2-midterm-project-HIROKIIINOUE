@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Box from "@mui/material/Box";
 import { getDataNowPlaying } from '../../Hooks/useFetch';
+import { useMovies } from '../../context/MovieContext';
 
 
 type ImageItem = {
@@ -21,18 +22,17 @@ const dummyImages: ImageItem[] = [
 
 
 const MainDisplay = () => {
-  const [nowPlayingList, setNowPlayingList] = useState<any[]>([])
+  const { movies, setMovies } = useMovies();
 
   useEffect(() => {
-    const getNowPlayingList = async () => {
+    const getmovies = async () => {
       const data = await getDataNowPlaying()
-      console.log(data)
-      setNowPlayingList(data)
+      setMovies(data)
     }
-    getNowPlayingList()
+    getmovies()
   }, [])
 
-  // console.log(nowPlayingList)
+  // console.log(movies)
 
 
   // replace with API data later
@@ -58,7 +58,7 @@ const MainDisplay = () => {
   useEffect(() => {
     if (images.length <= 3) return; // 2枚だけなら動かさない
 
-    const maxOffset = nowPlayingList.length - 3; // 例: 3枚 → 1, 4枚 → 2
+    const maxOffset = movies.length - 3; // 例: 3枚 → 1, 4枚 → 2
     const STEP = 0.005; // 1回の更新でどれだけ進むか（大きいほど速い）
     let direction = 1; // 1: 右へ, -1: 左へ
 
@@ -83,7 +83,7 @@ const MainDisplay = () => {
     }, 16); // 約60fps
 
     return () => window.clearInterval(id);
-  }, [nowPlayingList, visibleCount]);
+  }, [movies, visibleCount]);
 
   const slidePercent = 100 / visibleCount;
   const translateXPercent = -offset * slidePercent;
@@ -100,7 +100,7 @@ const MainDisplay = () => {
           height: "100%"
         }}
       >
-        {nowPlayingList.map((nowPlaying) => (
+        {movies.map((nowPlaying) => (
           <Box
             key={nowPlaying.id}
             // 幅 50% 固定 → 画面に常に2枚表示
@@ -122,13 +122,7 @@ const MainDisplay = () => {
                 justifyContent: "center",
               }}
             >
-              <Box
-                component="img"
-                src={`https://image.tmdb.org/t/p/w500/${nowPlaying.poster_path}`}
-                alt={nowPlaying.id ?? ""}
-                sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
-              {/* <p className='h-[10%] w-full text-center bg-amber-400'>aaaaaaaaaaa</p> */}
+              <img src={`https://image.tmdb.org/t/p/w500/${nowPlaying.poster_path}`} alt={String(nowPlaying.id ?? "")} className='w-full h-full object-cover block' />
             </Box>
             <Box
               sx={{
