@@ -3,7 +3,7 @@ import Footer from './Components/Footer'
 import Header from './Components/Header'
 import Main from './Components/MainPage/Main'
 import 'swiper/css';
-import { MovieProvider } from './context/MovieContext'
+import { MovieProvider } from './Context/MovieContext'
 
 function App() {
 

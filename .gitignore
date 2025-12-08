@@ -25,4 +25,9 @@ dist-ssr
 
 README_school.md
 
-src/Hooks/useFetch.ts
+# src/Hooks/useFetch.ts
+
+todos.txt
+
+# Env files (Vite)
+.env

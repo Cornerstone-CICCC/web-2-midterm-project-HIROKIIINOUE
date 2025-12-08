@@ -4,6 +4,7 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 export type Movie = {
   id: number;
   original_title: string;
+  overview: string;
   poster_path: string | null;
   [key: string]: unknown;
 };
