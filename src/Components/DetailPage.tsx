@@ -9,7 +9,6 @@ type Props = {
   detailImage: string
   detailText: string
 }
-// {` ${theme === 'dark' ? '' : ''}`}
 
 const DetailPage = (props: Props) => {
   const { setShowDetailPage, detailTitle, detailImage, detailText } = props;

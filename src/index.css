@@ -12,20 +12,3 @@
     font-family: "Constantia", sans-serif;
   }
 }
-
-/* 横スクロールの無限ループアニメーション */
-@keyframes scroll-x {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    /* トラック全体の幅の 50% 分だけ左に移動
-       → 配列を2回並べることで、前半と後半がピタッと繋がる */
-    transform: translateX(-50%);
-  }
-}
-
-.infinite-slider-track {
-  animation: scroll-x 5s linear infinite;
-  /* 20s → 速度。大きくするとゆっくり、小さくすると速くなる */
-}

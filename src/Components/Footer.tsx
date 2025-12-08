@@ -5,7 +5,6 @@ import { useTheme } from '../Hooks/useTheme';
 
 const Footer = () => {
   const { theme } = useTheme();
-  // {` ${theme === 'dark' ? '' : ''}`}
 
   return (
     <div className={`h-[68px] ${theme === 'dark' ? 'bg-black text-gray-100' : 'bg-gray-300 text-gray-900'}`}>
