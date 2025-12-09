@@ -2,7 +2,7 @@ import type { Movie } from "../Context/MovieContext";
 
 const tmdbToken = import.meta.env.VITE_TMDB_ACCESS_TOKEN as string;
 if (!tmdbToken) {
-  throw new Error("VITE_TMDB_ACCESS_TOKEN is missing");
+  throw new Error("API token is missing");
 }
 
 const authHeader = `Bearer ${tmdbToken}`;
