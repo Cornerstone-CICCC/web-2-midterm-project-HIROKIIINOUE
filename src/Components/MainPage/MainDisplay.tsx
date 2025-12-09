@@ -5,22 +5,6 @@ import { getTrendingMovie } from '../../Hooks/useFetch';
 import { useMovies } from '../../Context/MovieContext';
 import DetailPage from '../DetailPage';
 
-type ImageItem = {
-  id: number;
-  src: string;
-  alt?: string;
-};
-
-// public フォルダ内のダミー画像
-const dummyImages: ImageItem[] = [
-  { id: 1, src: 'sample1.jpg', alt: 'Sample 1' },
-  { id: 2, src: 'sample2.jpg', alt: 'Sample 2' },
-  { id: 3, src: 'sample3.jpg', alt: 'Sample 3' },
-  { id: 4, src: 'sample3.jpg', alt: 'Sample 3' },
-  { id: 5, src: 'sample3.jpg', alt: 'Sample 3' },
-];
-
-
 const MainDisplay = () => {
   const [showDetailPage, setShowDetailPage] = useState<boolean>(false)
   const [detailImage, setDetailImage] = useState<string>("")
@@ -35,12 +19,6 @@ const MainDisplay = () => {
     }
     getmovies()
   }, [])
-
-  // console.log(movies)
-
-
-  // replace with API data later
-  const images = dummyImages;
 
   // 「何枚ぶん進んだか」を表す値（0〜 images.length - 2）
   const [offset, setOffset] = useState(0);
@@ -60,23 +38,23 @@ const MainDisplay = () => {
   const visibleCount = viewportWidth <= 690 ? 2 : 3;
 
   useEffect(() => {
-    if (images.length <= 3) return; // 2枚だけなら動かさない
+    if (movies.length <= 3) return; // no movement if movies are less than 3
 
-    const maxOffset = movies.length - 3; // 例: 3枚 → 1, 4枚 → 2
-    const STEP = 0.005; // 1回の更新でどれだけ進むか（大きいほど速い）
-    let direction = 1; // 1: 右へ, -1: 左へ
+    const maxOffset = movies.length - 3;
+    const STEP = 0.005; // loop slide speed
+    let direction = 1; // 1: to Right, -1: to Left
 
     const id = window.setInterval(() => {
       setOffset((prev) => {
         let next = prev + STEP * direction;
 
-        // 左端に着いたら右へ
+        // change direction when it arrives left edge
         if (next <= 0) {
           next = 0;
           direction = 1;
         }
 
-        // 右端に着いたら左へ
+        // change direction when it arrives right edge
         if (next >= maxOffset) {
           next = maxOffset;
           direction = -1;
@@ -84,7 +62,7 @@ const MainDisplay = () => {
 
         return next;
       });
-    }, 16); // 約60fps
+    }, 16);
     if (showDetailPage) {
       window.clearInterval(id);
     }
@@ -108,12 +86,11 @@ const MainDisplay = () => {
   return (
     <>
       <Box sx={{ height: "70%", width: "100%", maxWidth: 1200, mx: "auto", overflow: "hidden" }}>
-        {/* 全スライドを横に並べて、translateX で動かす */}
         <Box
           sx={{
             display: "flex",
             transform: `translateX(${translateXPercent}%)`,
-            transition: "none", // 自前で位置を変えているので CSS アニメは使わない
+            transition: "none",
             willChange: "transform",
             height: "100%",
           }}
@@ -121,7 +98,6 @@ const MainDisplay = () => {
           {movies.map((nowPlaying) => (
             <Box
               key={nowPlaying.id}
-              // 幅 50% 固定 → 画面に常に2枚表示
               sx={{
                 flex: `0 0 ${slidePercent}%`,
                 height: "100%",
